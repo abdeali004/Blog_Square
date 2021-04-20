@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>About Us</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href={% static '/connect/vendor/bootstrap/css/bootstrap.min.css' %} rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link rel="stylesheet" href={% static 'vendor/font-awesome/css/font-awesome.min.css' %}>
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet'
+    type='text/css'>
+  <link
+    href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+    rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href={% static 'connect/css/clean-blog.min.css' %} rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="home">Blog Square</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+        data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+        aria-label="Toggle navigation">
+        Menu
+        <i class="fa fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url({% static '/img/aboutMain2.jpg' %})">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h2>About Us</h2>
+            <hr style="background:white;">
+            <span class="subheading"><i>I know you are eager to know about us.</i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+      <h2>About Blog Square</h2>
+        <p><strong><i>Blog Square</i></strong> is a blogging website where you can <strong>read, write, gain and share </strong>different types of information. 
+        The 'blog square' is named after a <strong>square of blogs</strong>. A <i>'square'</i> is an open, typically four-sided area which connects multiple roads or path.
+         Here the <i>'roads'</i> refer to different <strong>areas of knowledge. </strong></p>
+        <p>Blog Square is a place where different types of <strong>ideas</strong> from various people <strong>connect</strong>, 
+        and every single person can <strong>gain</strong> different types of<strong> knowledge</strong>. </p>
+        <h2>About Developers</h2>
+        <p>Blog Square is developed by <strong><i>Abdeali Stationwala</i></strong> and <strong><i>Brij Bhushan Tiwari</i></strong>. Both are students of <strong>MCA</strong> (Master in computer application).
+         Both are very keen to learn and develop different things.
+         Their main aim is to grow the IT sector with new <strong>innovations and ideas</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!--Developer card-->
+  <div class="container">
+    <hr style="background:black;">
+    <div class="row">
+      <!--1st card starts-->
+      <div class="col">
+        <div class="card mb-3 border-0" style="max-width: 400px;">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img class="rounded-circle" src={% static '/img/abdeali004.jpg' %} alt="...">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h10 class="card-title">Abdeali Stationwala</h10>
+                <div class="row">
+                  <div class="col"><a href="#"><i class="fa fa-linkedin"></i></a></div>
+                  <div class="col"><a href="#"><i class="fa fa-twitter"></i></a></div>
+                  <div class="col"><a href="#"><i class="fa fa-globe"></i></a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--1st card end-->
+      <div class="col"></div>
+      <!--2nd card starts-->
+      <div class="col">
+        <div class="card mb-3 border-0" style="max-width: 400px;">
+          <div class="row g-0">
+            <div class="col-md-8">
+              <div class="card-body">
+                <h10 class="card-title">Brij Bhushan Tiwari</h10>
+                <div class="row">
+                  <div class="col"><a href="#"><i class="fa fa-linkedin"></i></a></div>
+                  <div class="col"><a href="#"><i class="fa fa-twitter"></i></a></div>
+                  <div class="col"><a href="#"><i class="fa fa-globe"></i></a></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <img class="rounded-circle" src={% static '/img/brij2027.jpg' %} alt="...">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--2nd card ends-->
+    </div>
+      <hr style="background:black;">
+  </div>
+  <!--developer card ends-->
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+
+          <p class="copyright text-muted">Copyright &copy; <a href="home">Blog Square</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src={% static 'connect/vendor/jquery/jquery.min.js' %}></script>
+  <script src={% static 'connect/vendor/bootstrap/js/bootstrap.bundle.min.js' %}></script>
+
+  <script src={% static 'connect/js/clean-blog.min.js' %}></script>
+
+</body>
+
+</html>

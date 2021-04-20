@@ -1,0 +1,396 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>User Profile</title>
+
+  <!-- Bootstrap core CSS -->
+    <link href={% static '/connect/vendor/bootstrap/css/bootstrap.min.css' %} rel="stylesheet">
+    <link rel="stylesheet" href={% static 'vendor/font-awesome/css/font-awesome.min.css' %} >
+    <link rel="stylesheet" href={% static 'css/myProfile.css' %} >
+  <!-- Custom fonts for this template -->
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href={% static 'connect/css/clean-blog.min.css' %} rel="stylesheet">
+
+</head>
+<!--button style-->
+<style>
+  #file {
+    opacity: 0;
+    width: 0.1px;
+    height: 0.1px;
+    position: absolute;
+  }
+
+  .file-input button {
+    display: block;
+    position: relative;
+    width: 150px;
+    height: 35px;
+    border-radius: 25px;
+    background: linear-gradient(40deg, #fffd6e, #f5d773);
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(41, 19, 19);
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform .2s ease-out;
+  }
+  .file-input button:hover{
+    transform: scale(1.05) !important;
+    color:black;
+  }
+</style>
+<!--style ends-->
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="home">Blog Square</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fa fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contact">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+<div class="main-content">
+<!-- Top navbar -->
+
+<!-- Header -->
+<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center" style="min-height: 100px; background-image: url(https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MXwxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60); background-size: cover; background-position: center top;">
+  <!-- Mask -->
+  <span class="mask bg-gradient-default opacity-8"></span>
+  <!-- Header container -->
+  <div class="container-fluid d-flex align-items-center">
+    <div class="row">
+      <div class="col-lg-7 col-md-10">
+      <br>
+        <h1 class="display-2 text-white">Hello {{request.user}}</h1>
+        <p class="text-white mt-0 mb-5">This is your profile page. You can see the progress you've made with our website and how much you love to interect with us.</p>
+        <a id = "editButton" class="btn btn-info" onclick= "editme()">Edit profile</a>
+        <a id = "saveButton" class="btn btn-success" onclick= "saveme()" style="font-size:15px;">Save</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page content -->
+<div class="container-fluid mt--7">
+  <div class="row">
+    <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
+      <div class="card card-profile shadow">
+        <div class="row justify-content-center">
+          <div class="col-lg-3 order-lg-2">
+            <div class="card-profile-image">
+              <a href="#">
+                {% comment %} <img src="https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png" class="rounded-circle"> {% endcomment %}
+                <img src="media/{{profile.pic}}" id="user_image" class="rounded-circle">
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+          <div class="d-flex justify-content-between">
+            <a href="{{profile.fb}}" id="fb_button" class="btn btn-sm btn-default mr-4" target="_blank"><i class="fa fa-facebook fa-lg"></i></a>
+            <a href="{{profile.insta}}" id="insta_button" class="btn btn-sm btn-danger float-right" target="_blank"><i class="fa fa-instagram fa-lg"></i></a>
+          </div>
+        </div>
+        <div class="card-body pt-0 pt-md-4">
+        <!--file upload-->
+        <center>
+        <div class="file-input">
+          <button type="button" id="img-btn" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Edit image
+          </button>
+        </div>
+        </center>
+        <!--file upload ends-->
+          <div class="row">
+            <div class="col">
+              <div class="card-profile-stats d-flex justify-content-center mt-md-5">
+                <div>
+                  <span class="heading">{{profile.read}}</span>
+                  <span class="description">Read</span>
+                </div>
+                <div>
+                  <span class="heading">{{profile.published}}</span>
+                  <span class="description">Published</span>
+                </div>
+                <div>
+                  <span class="heading">{{profile.visited}}</span>
+                  <span class="description">Visited</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-center">
+            <h3 id= "profileName">
+              {{profile.firstName}} {{profile.lastName}}
+            </h3>
+            <div class="h5 font-weight-300">
+              <i class="ni location_pin mr-2" id="location"><i class="fa fa-map-marker fa-lg"></i>{{profile.city}} ({{profile.state}})</i>
+            </div>
+            
+            <hr class="my-4">
+            <p id = "aboutme">{{profile.about}}</p>
+          </div>
+          <center><a href="logout" type="button" class="btn btn-danger">Logout</a></center>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-8 order-xl-1">
+      <div class="card bg-secondary shadow">
+        <div class="card-header bg-white border-0">
+          <div class="row align-items-center">
+            <div class="col-8">
+              <h3 class="mb-0">My account</h3>
+            </div>
+            <div class="col-4 text-right">
+              {% comment %}if Button needed here {% endcomment %}
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+        <!--edited profile page-->
+        <div id = "editContent">{% include 'profileformedit.html' %}</div>
+        <!--edited profile page ends-->
+        <!--main content starts-->
+            <div id = "mainContent">
+            <h6 class="heading-small text-muted mb-4">User information</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group focused">
+                    <label class="form-control-label" for="input-username" >Username</label>
+                    <p>{{profile.username}}</p>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-email">Email address</label>
+                    <p>{{profile.email}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group focused">
+                    <label class="form-control-label" for="input-first-name">First name</label>
+                    <p id = "first-name">{{profile.firstName}}</p>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group focused">
+                    <label class="form-control-label" for="input-last-name">Last name</label>
+                    <p id = "last-name">{{profile.lastName}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr class="my-4">
+            <!-- Address -->
+            <h6 class="heading-small text-muted mb-4">Contact information</h6>
+            <div class="pl-lg-4">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group focused">
+                    <label class="form-control-label" for="input-address">Facebook URL</label>
+                    <p id = "fb">{{profile.fb}} </p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group focused">
+                    <label class="form-control-label" for="input-address">Instagram URL</label>
+                    <p id = "insta">{{profile.insta}} </p>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="form-group focused">
+                    <label class="form-control-label" for="input-city">City</label>
+                    <p id = "city">{{profile.city}}</p>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group focused">
+                    <label class="form-control-label" for="input-country">State</label>
+                    <p id = "state">{{profile.state}}</p>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-country">Postal code</label>
+                    <p id = "postal">{{profile.postal}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr class="my-4">
+            <!-- Description -->
+            <h6 class="heading-small text-muted mb-4">About me</h6>
+            <div class="pl-lg-4">
+              <div class="form-group focused">
+                <label class="form-control-label">About Me</label>
+                <p id = "aboutMain">{{profile.about}}</p>
+              </div>
+            </div>
+            </div>
+            <!--main Content ends-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!--modal of image edit-->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">Edit image</h3>
+      </div>
+      <form method = "POST" action = {% url 'updateImage'%} enctype = "multipart/form-data">
+      {% csrf_token %}
+      <div class="modal-body">
+        <p style="color:red;"> **Please upload your image of size 110px*110px Approx.
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Select Image</label>
+                <input class="form-control" name = "pic" type="file" id="formFile" onchange="readImageURL(this);" required>
+            </div>
+        <img id="blah-user" src="media/userImages/defaultShow.jpg" alt="{{request.user}}-image" disabled/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">Update</button>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
+<!--modal of image edit ends-->
+
+
+
+<!--js files-->
+    <script src={% static 'connect/vendor/jquery/jquery.min.js' %}></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <script>
+      window.onload = function() {
+          document.getElementById("editContent").style.display = "none";
+          document.getElementById("saveButton").style.display = "none";
+          };
+
+          function editme()
+          {
+          document.getElementById("mainContent").style.display = "none";
+          document.getElementById("editButton").style.display = "none";
+          document.getElementById("editContent").style.display = "block";
+          document.getElementById("saveButton").style.display = "block";
+          }
+
+          function readImageURL(input) {
+            document.getElementById("blah-user").disabled = false;
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah-user')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+          }
+
+          function saveme()
+          {
+          var first = document.getElementById("input-first-name").value;
+          var last = document.getElementById("input-last-name").value;
+          var fb = document.getElementById("fb-address").value;
+          var insta = document.getElementById("insta-address").value;
+          var city = document.getElementById("input-city").value;
+          var state = document.getElementById("input-state").value;
+          var about = document.getElementById("about").value;
+          var postal = document.getElementById("input-postal-code").value;
+
+          $.ajax({
+              type: "POST",
+              url: '/profileEdit',
+              data: {
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+              'first': first,
+              'last': last,
+              'fb': fb,
+              'insta': insta,
+              'city': city,
+              'state': state,
+              'about': about,
+              'postal': postal,
+              },
+              dataType: 'json',
+              success: function (data) {
+              if (data.successful == "true") {
+                  document.getElementById("mainContent").style.display = "block";
+                  document.getElementById("editButton").style.display = "block";
+                  document.getElementById("editContent").style.display = "none";
+                  document.getElementById("saveButton").style.display = "none";
+                  document.getElementById("first-name").innerHTML = first;
+                  document.getElementById("last-name").innerHTML = last;
+                  document.getElementById("profileName").innerHTML = first + " " + last;
+                  document.getElementById("fb").innerHTML = fb;
+                  document.getElementById("fb_button").href = fb;
+                  document.getElementById("insta_button").href = insta;
+                  document.getElementById("insta").innerHTML = insta;
+                  document.getElementById("city").innerHTML = city;
+                  document.getElementById("state").innerHTML = state;
+                  document.getElementById("postal").innerHTML = postal;
+                  document.getElementById("aboutMain").innerHTML = about;
+                  document.getElementById("location").innerHTML = city + " (" + state + ")";
+                  document.getElementById("aboutme").innerHTML = about;
+              }
+              else{
+                  alert("Something went wrong try again.")
+              }
+              }
+          });
+          }
+
+    </script>
+<!--js files-->
+</body>
+</html>
