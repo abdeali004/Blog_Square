@@ -1,6 +1,9 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 import blogMain.views as views
+# from blogapp.views import allblogs_view ,blog_view ,userblogs_view
+import blogapp
+from blogapp import urls as blogurls
 
 urlpatterns = [
     path('', views.home),
@@ -14,9 +17,7 @@ urlpatterns = [
     path('myProfile', views.profile, name = "profile"),
     path('profileEdit', views.profileEdit),
     path('updateImage', views.updateImage, name="updateImage"),
-    path('blogs', views.blogs, name = "blogs"),
-    path('blog', views.blog, name = "blog"),
-    path('userBlogs', views.userBlogs, name = "userBlogs"),
+    path('blogapp/',include(blogurls)),
     path('contact', views.contact, name = "contact"),
     path('user_help', views.user_help, name="help"),
     path('about', views.about, name = "about"),
