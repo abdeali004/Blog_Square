@@ -44,7 +44,12 @@
                 <center>
                 <div style="margin-top:30px">
                   <i id="thumbsup" class="fa fa-thumbs-up" style="font-size:50px;padding: 0px 20px;color:gray;"></i>
-                  <i  class="fa fa-thumbs-down fa-flip-horizontal" style="font-size:50px;padding: 0px 20px;color:gray;"></i>
+                  <i id="thumbsdown" class="fa fa-thumbs-down fa-flip-horizontal" style="font-size:50px;padding: 0px 20px;color:gray;"></i>
+                <!-- </div>
+                <div> -->
+                  <br>
+                  <span id="upvote" style="font-size:25px;padding: 0px 30px;color:gray;" >{{blog.blog_upvote}}</span>
+                  <span id="downvote" style="font-size:25px;padding: 0px 30px;color:gray;">{{blog.blog_downvote}}</span>
                 </div>
                 </center>
                 
@@ -168,6 +173,24 @@
           }
           }
         });
+
+        $.ajax({
+          url:"{%url 'uservotes' %}",
+          method:"POST",
+          data:{
+            csrfmiddlewaretoken:"{{csrf_token}}",
+            blog_id:"{{blog.blog_id}}",
+          },
+          success:function(data){
+            if (data.like == true){
+              $('#thumbsup').css('color','skyblue');
+            }
+            else if (data.dislike == true){
+              $('#thumbsdown').css('color','skyblue');
+            }
+            console.log(data)
+          }
+        })
       
           
           $('#addcomment').click(function(){
@@ -210,11 +233,59 @@
             
           })
           $('#thumbsup').click(function(){
-                var color = $('#thumbsup').attr('color');
-                alert(color);
-                console.log(color)
-                //$('.fa fa-thumbs-up').attr('color':)
+                var plus = true;
+                var color = $('#thumbsup').css('color');
+                if (color == "rgb(135, 206, 235)"){
+                  $('#thumbsup').css('color',"gray");
+                  plus = false;
+                }
+                else{
+                  $('#thumbsup').css('color',"skyblue");
+                  $('#thumbsdown').css('color','gray');
+                }
+
+                $.ajax({
+                  url:"{%url 'likes&dislikes' %}",
+                  method:"POST",
+                  data:{
+                    csrfmiddlewaretoken:"{{csrf_token}}",
+                    blogid:"{{blog.blog_id}}",
+                    like: true,
+                    plus:plus,
+                  },
+                  success:function(data){
+                      $('#upvote').replaceWith(`<span id="upvote" style="font-size:25px;padding: 0px 30px;color:gray;" >${data.upvote}</span>`);
+                    }
+                })
             })
+
+            $('#thumbsdown').click(function(){
+                var plus = true;
+                var color = $('#thumbsdown').css('color');
+                if (color == "rgb(135, 206, 235)"){
+                  $('#thumbsdown').css('color',"gray");
+                  plus = false;
+                }
+                else{
+                  $('#thumbsdown').css('color',"skyblue");
+                  $('#thumbsup').css('color','gray');
+                }
+
+                $.ajax({
+                  url:"{%url 'likes&dislikes' %}",
+                  method:"POST",
+                  data:{
+                    csrfmiddlewaretoken:"{{csrf_token}}",
+                    blogid:"{{blog.blog_id}}",
+                    like: false,
+                    plus:plus,
+                  },
+                  success:function(data){
+                    $('#downvote').replaceWith(`<span id="downvote" style="font-size:25px;padding: 0px 30px;color:gray;" >${data.downvote}</span>`)
+                  }
+                })
+            })
+
       })
       </script>
   {% endblock body %}

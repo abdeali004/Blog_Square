@@ -41,8 +41,31 @@ class blog_article(models.Model):
         blogviews = blog_article.objects.get(blog_id=id).blog_views
         blog_article.objects.filter(blog_id=id).update(blog_views = blogviews + 1)
 
+    @staticmethod
+    def upvote(id,plus):
+        upvotes = blog_article.objects.get(blog_id=id).blog_upvote
+        if plus == "true":
+            blog_article.objects.filter(blog_id=id).update(blog_upvote = upvotes + 1)
+        elif upvotes != 0:
+            blog_article.objects.filter(blog_id=id).update(blog_upvote = upvotes - 1)
+        
+
+    @staticmethod
+    def downvote(id,plus):
+        downvotes = blog_article.objects.get(blog_id=id).blog_downvote
+        if plus == "true":
+            blog_article.objects.filter(blog_id=id).update(blog_downvote = downvotes + 1)
+        elif downvotes != 0:
+            blog_article.objects.filter(blog_id=id).update(blog_downvote = downvotes - 1)
 
 
+    @staticmethod
+    def get_downvotes_count(id):
+        return blog_article.objects.get(blog_id=id).blog_downvote
+
+    @staticmethod
+    def get_upvotes_count(id):
+        return blog_article.objects.get(blog_id=id).blog_upvote
 
 class article_comments(models.Model):
     blog_id = models.ForeignKey(blog_article,on_delete=models.CASCADE)
@@ -67,4 +90,23 @@ class article_tags(models.Model):
     tags = models.TextField()
     count = models.IntegerField()
     
+class article_votes_description(models.Model):
+    user = models.ForeignKey(userInfo,on_delete=models.CASCADE)
+    blog = models.ForeignKey(blog_article,on_delete=models.CASCADE)
+    like = models.BooleanField(default=False)
+    dislike = models.BooleanField(default=False)
 
+    @staticmethod
+    def updateval(username,blog_id,like):
+        user = userInfo.objects.get(username=username)
+        blog = blog_article.objects.get(blog_id=blog_id)
+
+        if like == "true":
+            article_votes_description.objects.update_or_create(user=user,blog=blog,defaults = {"like":True,"dislike":False})
+        else:
+            article_votes_description.objects.update_or_create(user=user,blog=blog,defaults = {"like":False,"dislike":True})
+
+    @staticmethod
+    def get_votes(id):
+        blog = blog_article.objects.get(blog_id=id)
+        return article_votes_description.objects.filter(blog=blog)

@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from django.http import HttpResponse, request,JsonResponse
 from django.contrib.auth import get_user
-from .models import blog_article,article_comments
+from .models import blog_article,article_comments,article_votes_description
 from blogMain.models import userInfo
 import datetime
 
@@ -60,11 +60,37 @@ def savecomment(request,id):
     if request.method == 'POST':
         user = request.POST.get('user')
         usercomment = request.POST.get('usercomment')
-        
         userobj = userInfo.get_user(user)
         articleobj = blog_article.get_blog(id)
-
         article_comments.savecomment(articleobj,userobj,usercomment)
         blog_article.update_comment_count(id)
-
         return JsonResponse({"user":user,"date":datetime.date.today(),"comment":usercomment},safe=True)
+
+def votescounter(request):
+    if request.method == "POST":
+        like = request.POST.get('like')
+        blogid = request.POST.get('blogid')
+        plus = request.POST.get('plus')
+        if like == "true":
+            blog_article.upvote(blogid,plus)
+        else:
+            blog_article.downvote(blogid,plus)
+
+        votesdescobj = article_votes_description.updateval(request.user,blogid,like)
+
+    downvote =  blog_article.get_downvotes_count(blogid)
+    upvote   =  blog_article.get_upvotes_count(blogid)
+    return JsonResponse({"upvote":upvote,"downvote":downvote},safe=False)
+
+def get_user_votes(request):
+    if request.method == "POST":
+        blog_id = request.POST.get('blog_id')
+        uservote = article_votes_description.get_votes(blog_id)
+        like = False
+        dislike = False
+        if (uservote.count() != 0):
+            like = uservote[0].like
+            dislike = uservote[0].dislike    
+    return JsonResponse({"like":like,"dislike":dislike},safe=False)
+
+    
