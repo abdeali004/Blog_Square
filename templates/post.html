@@ -10,19 +10,21 @@
         <main class="post blog-post col-lg-8"> 
           <div class="container">
             <div class="post-single">
-              <div class="post-thumbnail"><img src={% static 'img/blog-post-3.jpeg' %} alt="..." class="img-fluid"></div>
+              <div class="post-thumbnail"><img src="{{blog.blog_thumbnail.url}}" alt="..." class="img-fluid"></div>
               <div class="post-details">
                 <div class="post-meta d-flex justify-content-between">
-                  <div class="category"><a href="#">Business</a><a href="#">Financial</a></div>
+                  <div class="category">
+                    <a href="#">Business</a><a href="#">Financial</a>
+                  </div>
                 </div>
-                <h1>Diversity in Engineering: The Effect on Questions<a href="#"><i class="fa fa-bookmark-o"></i></a></h1>
+                <h1>{{blog.blog_title}}<a href="#"><i class="fa fa-bookmark-o"></i></a></h1>
                 <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#" class="author d-flex align-items-center flex-wrap">
-                    <div class="avatar"><img src={% static 'img/avatar-1.jpg' %} alt="..." class="img-fluid"></div>
-                    <div class="title"><span>John Doe</span></div></a>
+                    <div class="avatar"><img src="{{blog.blog_author.pic.url}}" alt="..." class="img-fluid"></div>
+                    <div class="title"><span>{{blog.blog_author.username}}</span></div></a>
                   <div class="d-flex align-items-center flex-wrap">       
-                    <div class="date"><i class="icon-clock"></i> 2 months ago</div>
-                    <div class="views"><i class="icon-eye"></i> 500</div>
-                    <div class="comments meta-last"><i class="icon-comment"></i>12</div>
+                    <div class="date"><i class="icon-clock"></i>{{blog.blog_creation_date|timesince}}</div>
+                    <div class="views"><i class="icon-eye"></i>{{blog.blog_views}}</div>
+                    <div class="comments meta-last"><i class="icon-comment"></i>{{blog.num_of_comments}}</div>
                   </div>
                 </div>
                 <div class="post-body">
@@ -50,9 +52,9 @@
                     <div class="icon next"><i class="fa fa-angle-right">   </i></div></a></div>
                 <div class="post-comments">
                   <header>
-                    <h3 class="h6">Post Comments<span class="no-of-comments">(3)</span></h3>
+                    <h3 class="h6">Post Comments<span class="no-of-comments">({{blog.num_of_comments}})</span></h3>
                   </header>
-                  <div class="comment">
+                  <!-- <div class="comment">
                     <div class="comment-header d-flex justify-content-between">
                       <div class="user d-flex align-items-center">
                         <div class="image"><i class="fa fa-arrow-right"></i></div>
@@ -62,8 +64,8 @@
                     <div class="comment-body">
                       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
                     </div>
-                  </div>
-                  <div class="comment">
+                  </div> -->
+                  <!-- <div class="comment">
                     <div class="comment-header d-flex justify-content-between">
                       <div class="user d-flex align-items-center">
                         <div class="image"><i class="fa fa-arrow-right"></i></div>
@@ -84,22 +86,22 @@
                     <div class="comment-body">
                       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="add-comment">
                   <header>
                     <h3 class="h6">Leave a reply</h3>
                   </header>
-                  <form action="#" class="commenting-form">
+                  <form id="form" action="#" class="commenting-form">
                     <div class="row">
                       <div class="form-group col-md-6">
-                        <input type="text" name="username" value="abdeali004" id="username" placeholder="Name" class="form-control" disabled>
+                        <input type="text" name="username" value="{{blog.blog_author.username}}" id="username" placeholder="Name" class="form-control" disabled>
                       </div>
                       <div class="form-group col-md-12">
                         <textarea name="usercomment" id="usercomment" placeholder="Type your comment" class="form-control"></textarea>
                       </div>
                       <div class="form-group col-md-12">
-                        <button type="submit" class="btn btn-secondary">Submit Comment</button>
+                        <button id = "addcomment" type="button" class="btn btn-secondary">Submit Comment</button>
                       </div>
                     </div>
                   </form>
@@ -126,7 +128,20 @@
             <header>
               <h3 class="h6">Latest Posts</h3>
             </header>
-            <div class="blog-posts"><a href="#">
+            {%for post in latest_posts %}
+              <div class="blog-posts"><a href="{%url 'blog' post.blog_id%}">
+                <div class="item d-flex align-items-center">
+                  <div class="image"><img src="{{post.blog_thumbnail.url}}" alt="..." class="img-fluid"></div>
+                  <div class="title"><strong>{{post.blog_title}}</strong>
+                    <div class="d-flex align-items-center">
+                      <div class="views"><i class="icon-eye"></i> {{post.blog_views}}</div>
+                      <div class="comments"><i class="icon-comment"></i>{{post.num_of_comments}}</div>
+                    </div>
+                  </div>
+              </div>
+            {%endfor%}
+
+            <!-- <div class="blog-posts"><a href="#">
                 <div class="item d-flex align-items-center">
                   <div class="image"><img src="img/small-thumbnail-1.jpg" alt="..." class="img-fluid"></div>
                   <div class="title"><strong>Alberto Savoia Can Teach You About</strong>
@@ -153,7 +168,7 @@
                       <div class="comments"><i class="icon-comment"></i>12</div>
                     </div>
                   </div>
-                </div></a></div>
+                </div></a></div> -->
           </div>
           <!-- Widget [Categories Widget]-->
           <div class="widget categories">
@@ -182,4 +197,69 @@
         </aside>
       </div>
     </div>
+    <script>
+      $(document).ready(function(e){
+        $.ajax({
+          url: "{% url 'getcomment' blog.blog_id %}",
+          method:"GET",
+          success:function(data){
+          var output = "";
+          for (i=data.length-1;i>=0;i--){
+              output =` <div class="comment">
+                        <div class="comment-header d-flex justify-content-between">
+                          <div class="user d-flex align-items-center">
+                            <div class="image"><i class="fa fa-arrow-right"></i></div>
+                            <div class="title"><strong>${data[i].comment_author_id}</strong><span class="date">${data[i].comment_creation_date}</span></div>
+                          </div>
+                        </div>
+                        <div class="comment-body">
+                          <p>${data[i].comment_content}</p>
+                        </div>
+                      </div>`
+      
+              $('.post-comments').append(output);
+          }
+          }
+        });
+      
+          
+          $('#addcomment').click(function(){
+            //e.preventDefault();
+            var user = $('#username').val();
+            var usercomment = $('#usercomment').val();
+            var csr = "{{csrf_token}}";
+            $.ajax({
+              url: "{% url 'savecomment' blog.blog_id %}",
+              method:"POST",
+              data:{
+                user:user,
+                usercomment:usercomment,
+                csrfmiddlewaretoken:csr
+              },
+              success:function(data){
+                form.reset();
+                var output = "";
+                output =` <div class="comment">
+                        <div class="comment-header d-flex justify-content-between">
+                          <div class="user d-flex align-items-center">
+                            <div class="image"><i class="fa fa-arrow-right"></i></div>
+                            <div class="title"><strong>${data.user}</strong><span class="date">${data.date}</span></div>
+                          </div>
+                        </div>
+                        <div class="comment-body">
+                          <p>${data.comment}</p>
+                        </div>
+                      </div>`
+                  
+              $('.post-comments').append(output);
+              //for updating commentcount
+              var commentcount = $('.no-of-comments').text();
+              commentcount = commentcount.split('(')[1].split(')')[0];
+              var count = parseInt(commentcount,10) + 1;
+              $('.no-of-comments').replaceWith(`<span class="no-of-comments">(${count})</span>`);
+              }
+            });
+          })
+      })
+      </script>
   {% endblock body %}

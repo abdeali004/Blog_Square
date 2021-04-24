@@ -42,7 +42,7 @@ def registerUser(request):
             verifyUser.objects.create(
                 username=userName, full_name=userFullName, email=userMail, verificationCode=verifyCode)
             heading = "Blog Square account request."
-            messageContent = "Your Jotting account's secret verification code : " + verifyCode
+            messageContent = "Your blogSquare account's secret verification code : " + verifyCode
             msg = EmailMessage(heading, messageContent, settings.EMAIL_HOST_USER,
                                [userMail, ])
             msg.send()

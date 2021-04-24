@@ -12,18 +12,18 @@
               <!-- post -->
               {%for blog in blogslist%}
                 <div class="post col-xl-6 blogs-class">
-                  <div class="post-thumbnail"><a href="post.html"><img src={% static 'img/blog-post-1.jpeg' %} alt="..." class="img-fluid"></a></div>
+                  <div class="post-thumbnail"><a href="{%url 'blog' blog.blog_id%}"><img src={% static 'img/blog-post-1.jpeg' %} alt="..." class="img-fluid"></a></div>
                   <div class="post-details">
                     <div class="post-meta d-flex justify-content-between">
                       <div class="date meta-last">{{blog.blog_creation_date}}</div>
                       <div class="category"><a href="#">{{blog.blog_category}}</a></div>
-                    </div><a href="post.html">
+                    </div><a href="{%url 'blog' blog.blog_id%}">
                       <h3 class="h4">{{blog.blog_title}}</h3></a>
                     <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
                     <footer class="post-footer d-flex align-items-center" style="white-space: nowrap;"><a href="#" class="author d-flex align-items-center flex-wrap">
                         <div class="avatar"><img src={{blog.blog_author.pic.url}} alt="..." class="img-fluid"></div>
                         <div class="title"><span>{{blog.blog_author.username}}</span></div></a>
-                      <div class="date"><i class="icon-clock"></i> {{blog.blog_creation_date|timesince}}</div>
+                      <div class="date"><i class="icon-clock"></i> <span class="time">{{blog.blog_creation_date|timesince}}</span></div>
                       <div class="comments meta-last"><i class="icon-comment"></i>{{blog.num_of_comments}}</div>
                     </footer>
                   </div>
@@ -75,7 +75,7 @@
               <h3 class="h6">Latest Posts</h3>
             </header>
             {%for post in latest_posts %}
-              <div class="blog-posts"><a href="#">
+              <div class="blog-posts"><a href="{%url 'blog' post.blog_id%}">
                 <div class="item d-flex align-items-center">
                   <div class="image"><img src="{{post.blog_thumbnail.url}}" alt="..." class="img-fluid"></div>
                   <div class="title"><strong>{{post.blog_title}}</strong>
@@ -86,35 +86,7 @@
                   </div>
               </div>
             {%endfor%}
-            <!-- <div class="blog-posts"><a href="#">
-                <div class="item d-flex align-items-center">
-                  <div class="image"><img src={% static 'img/small-thumbnail-1.jpg' %} alt="..." class="img-fluid"></div>
-                  <div class="title"><strong>Alberto Savoia Can Teach You About</strong>
-                    <div class="d-flex align-items-center">
-                      <div class="views"><i class="icon-eye"></i> 500</div>
-                      <div class="comments"><i class="icon-comment"></i>12</div>
-                    </div>
-                  </div>
-                </div></a><a href="#">
-                <div class="item d-flex align-items-center">
-                  <div class="image"><img src={% static 'img/small-thumbnail-2.jpg' %} alt="..." class="img-fluid"></div>
-                  <div class="title"><strong>Alberto Savoia Can Teach You About</strong>
-                    <div class="d-flex align-items-center">
-                      <div class="views"><i class="icon-eye"></i> 500</div>
-                      <div class="comments"><i class="icon-comment"></i>12</div>
-                    </div>
-                  </div>
-                </div></a><a href="#">
-                <div class="item d-flex align-items-center">
-                  <div class="image"><img src={% static 'img/small-thumbnail-3.jpg' %} alt="..." class="img-fluid"></div>
-                  <div class="title"><strong>Alberto Savoia Can Teach You About</strong>
-                    <div class="d-flex align-items-center">
-                      <div class="views"><i class="icon-eye"></i> 500</div>
-                      <div class="comments"><i class="icon-comment"></i>12</div>
-                    </div>
-                  </div>
-                </div></a></div>
-          </div> -->
+            
           <!-- Widget [Categories Widget]-->
           <div class="widget categories">
             <header>
@@ -142,4 +114,15 @@
         </aside>
       </div>
     </div>
+    <script>
+      $(document).ready(function(e){
+        $('.time').each(function(){
+          var hours = $(this).text().split(',')[0];
+          $(this).html(`${hours} ago`);
+        })
+        
+        
+      })
+    </script>
+
     {% endblock body %}

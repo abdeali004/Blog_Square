@@ -31,6 +31,10 @@ class userInfo(models.Model):
     checkCode = models.CharField(max_length=12)
     date = models.DateTimeField(auto_now=False, auto_now_add=True)
 
+    @staticmethod
+    def get_user(user):
+        return userInfo.objects.get(username = user)
+
     def __str__(self):
         return self.username
 
