@@ -15,13 +15,25 @@
   <link href={% static '/connect/vendor/bootstrap/css/bootstrap.min.css' %} rel="stylesheet">
 
   <!-- Custom fonts for this template -->
-  <link href={% static 'connect/vendor/fontawesome-free/css/all.min.css' %} rel="stylesheet" type="text/css">
+  <link href={% static 'vendor/font-awesome/css/font-awesome.min.css' %} rel="stylesheet" type="text/css">
   <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
   <!-- Custom styles for this template -->
   <link href={% static 'connect/css/clean-blog.min.css' %} rel="stylesheet">
-
+  <style>
+      .user_image_AllBlogs{
+      width: 150px;
+      height: 150px;
+      border:2px solid #fff;
+      -moz-box-shadow: 0px 6px 5px #ccc;
+      -webkit-box-shadow: 0px 6px 5px #ccc;
+      box-shadow: 0px 6px 5px #ccc;
+      -moz-border-radius:190px;
+      -webkit-border-radius:190px;
+      border-radius:190px;
+    }
+  </style>
 </head>
 
 <body>
@@ -38,6 +50,9 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" href="{%url 'home' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'blogs' pagenum=1 %}">Blogs</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{%url 'about' %}">About</a>
@@ -57,8 +72,10 @@
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="site-heading">
+            <img class ="user_image_AllBlogs" src="{% static '/img/abdeali004.jpg' %}" class="rounded-circle" alt="Cinque Terre" >
             <h2>{{request.user}}</h2>
-            <span class="subheading">Blogs</span>
+            <span class="subheading"><b><u>About Me</u></b></span>
+            <span class="subheading">I am a programmer and a backend developer.</span>
           </div>
         </div>
       </div>
@@ -67,6 +84,31 @@
 
   <!-- Main Content -->
   <div class="container">
+  <center><h1><u>Blogs Contribution</u></h1></center>
+  <br>
+  <hr>
+  <div class="row">
+    <div class="col-md-2 mx-auto" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogs Liked">
+      <i class="fa fa-heart" style="color:#800909;"></i> 100
+    </div>
+    <div class="col-md-2 mx-auto" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogs Visited">
+      <i class="fa fa-eye"></i> 100
+    </div>
+    <div class="col-md-2 mx-auto" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogs Created">
+       <i class="fa fa-pencil" style="color:#093f80;"></i> 100
+    </div>
+    <div class="col-md-2 mx-auto" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogs Commented">
+      <i class="fa fa-comments" style="color:#4c0d73;"></i> 100
+    </div>
+    <div class="col-md-2 mx-auto" data-bs-toggle="tooltip" data-bs-placement="top" title="Stars Achieved">
+      <i class="fa fa-star" style="color:#6b0742;"></i> 100
+    </div>
+  </div>
+  <hr>
+  <br>
+  <br>
+  <center><h1><u>Recent Blogs</u></h1></center>
+  <hr>
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
         {%for blog in myblogs%}
@@ -136,6 +178,20 @@
         {%endif%}
       </div>
     </div>
+    <br>
+    <br>
+    <center><h2><u>CONNECT</u></h2></center>
+  <br>
+  <hr>
+  <div class="row justify-content-center">
+    <div class="col-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Instagram link">
+      <a href=""><i class="fa fa-facebook-square fa-3x" style="color:#030a52;"></i></a>
+    </div>
+    <div class="col-1 " data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook link">
+      <a href=""><i class="fa fa-instagram fa-3x" style="color:#c400be;"></i></a>
+    </div>
+  </div>
+  <hr>
   </div>
 
   <hr>

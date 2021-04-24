@@ -21,7 +21,7 @@ def allblogs_view(request,pagenum):
         "blogslist":blogs,
         "latest_posts":blog_article.get_all_blogs().order_by("-blog_creation_date")[0:3]
     }
-    return render(request, "blog.html",context)
+    return render(request, "blogs.html",context)
 
 def blog_view(request,id):
     blog = blog_article.get_blog(id)
@@ -46,7 +46,7 @@ def userblogs_view(request,allposts):
         "myblogs":myblogs,
         "allposts":allposts,
     }
-    return render(request,"myPost.html",context)
+    return render(request,"myPosts.html",context)
 
 def createblog_view(request):
     pass

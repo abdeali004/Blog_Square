@@ -800,9 +800,11 @@ section.latest-posts header {
  border-radius: 3px;
 }
 .blogs-class:hover{
-  transform: scale(1.01) !important;
-  background-color: #f6f7a5;
+  transform: scale(1.001) !important;
+  background-color: #eeeeee;
 }
+
+
 /* #a5ecf7 */
 .post-meta {
   margin: 10px 0;
