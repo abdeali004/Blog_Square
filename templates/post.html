@@ -41,6 +41,13 @@
                   </p>
                 </div>
                 <div class="post-tags"><a href="#" class="tag">#Business</a><a href="#" class="tag">#Tricks</a><a href="#" class="tag">#Financial</a><a href="#" class="tag">#Economy</a></div>
+                <center>
+                <div style="margin-top:30px">
+                  <i onclick="myFunction(this)" class="fa fa-thumbs-up " style="font-size:50px;padding: 0px 20px;color:gray;"></i>
+                  <i onclick="myFunction(this)" class="fa fa-thumbs-down fa-flip-horizontal" style="font-size:50px;padding: 0px 20px;color:gray;"></i>
+                </div>
+                </center>
+                
                 <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row"><a href="#" class="prev-post text-left d-flex align-items-center">
                     <div class="icon prev"><i class="fa fa-angle-left"></i></div>
                     <div class="text"><strong class="text-primary">Previous Post </strong>
@@ -50,43 +57,11 @@
                       <h6>I Bought a Wedding Dress.</h6>
                     </div>
                     <div class="icon next"><i class="fa fa-angle-right">   </i></div></a></div>
+          
                 <div class="post-comments">
                   <header>
                     <h3 class="h6">Post Comments<span class="no-of-comments">({{blog.num_of_comments}})</span></h3>
                   </header>
-                  <!-- <div class="comment">
-                    <div class="comment-header d-flex justify-content-between">
-                      <div class="user d-flex align-items-center">
-                        <div class="image"><i class="fa fa-arrow-right"></i></div>
-                        <div class="title"><strong>Jabi Hernandiz</strong><span class="date">May 2016</span></div>
-                      </div>
-                    </div>
-                    <div class="comment-body">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                    </div>
-                  </div> -->
-                  <!-- <div class="comment">
-                    <div class="comment-header d-flex justify-content-between">
-                      <div class="user d-flex align-items-center">
-                        <div class="image"><i class="fa fa-arrow-right"></i></div>
-                        <div class="title"><strong>Nikolas</strong><span class="date">May 2016</span></div>
-                      </div>
-                    </div>
-                    <div class="comment-body">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                    </div>
-                  </div>
-                  <div class="comment">
-                    <div class="comment-header d-flex justify-content-between">
-                      <div class="user d-flex align-items-center">
-                        <div class="image"><i class="fa fa-arrow-right"></i></div>
-                        <div class="title"><strong>John Doe</strong><span class="date">May 2016</span></div>
-                      </div>
-                    </div>
-                    <div class="comment-body">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-                    </div>
-                  </div> -->
                 </div>
                 <div class="add-comment">
                   <header>
@@ -141,34 +116,6 @@
               </div>
             {%endfor%}
 
-            <!-- <div class="blog-posts"><a href="#">
-                <div class="item d-flex align-items-center">
-                  <div class="image"><img src="img/small-thumbnail-1.jpg" alt="..." class="img-fluid"></div>
-                  <div class="title"><strong>Alberto Savoia Can Teach You About</strong>
-                    <div class="d-flex align-items-center">
-                      <div class="views"><i class="icon-eye"></i> 500</div>
-                      <div class="comments"><i class="icon-comment"></i>12</div>
-                    </div>
-                  </div>
-                </div></a><a href="#">
-                <div class="item d-flex align-items-center">
-                  <div class="image"><img src="img/small-thumbnail-2.jpg" alt="..." class="img-fluid"></div>
-                  <div class="title"><strong>Alberto Savoia Can Teach You About</strong>
-                    <div class="d-flex align-items-center">
-                      <div class="views"><i class="icon-eye"></i> 500</div>
-                      <div class="comments"><i class="icon-comment"></i>12</div>
-                    </div>
-                  </div>
-                </div></a><a href="#">
-                <div class="item d-flex align-items-center">
-                  <div class="image"><img src="img/small-thumbnail-3.jpg" alt="..." class="img-fluid"></div>
-                  <div class="title"><strong>Alberto Savoia Can Teach You About</strong>
-                    <div class="d-flex align-items-center">
-                      <div class="views"><i class="icon-eye"></i> 500</div>
-                      <div class="comments"><i class="icon-comment"></i>12</div>
-                    </div>
-                  </div>
-                </div></a></div> -->
           </div>
           <!-- Widget [Categories Widget]-->
           <div class="widget categories">
