@@ -43,8 +43,8 @@
                 <div class="post-tags"><a href="#" class="tag">#Business</a><a href="#" class="tag">#Tricks</a><a href="#" class="tag">#Financial</a><a href="#" class="tag">#Economy</a></div>
                 <center>
                 <div style="margin-top:30px">
-                  <i onclick="myFunction(this)" class="fa fa-thumbs-up " style="font-size:50px;padding: 0px 20px;color:gray;"></i>
-                  <i onclick="myFunction(this)" class="fa fa-thumbs-down fa-flip-horizontal" style="font-size:50px;padding: 0px 20px;color:gray;"></i>
+                  <i id="thumbsup" class="fa fa-thumbs-up" style="font-size:50px;padding: 0px 20px;color:gray;"></i>
+                  <i  class="fa fa-thumbs-down fa-flip-horizontal" style="font-size:50px;padding: 0px 20px;color:gray;"></i>
                 </div>
                 </center>
                 
@@ -206,7 +206,15 @@
               $('.no-of-comments').replaceWith(`<span class="no-of-comments">(${count})</span>`);
               }
             });
+
+            
           })
+          $('#thumbsup').click(function(){
+                var color = $('#thumbsup').attr('color');
+                alert(color);
+                console.log(color)
+                //$('.fa fa-thumbs-up').attr('color':)
+            })
       })
       </script>
   {% endblock body %}
