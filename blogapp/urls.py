@@ -9,5 +9,7 @@ urlpatterns = [
     path('userBlogs/<int:allposts>', views.userblogs_view, name = "userBlogs"),
     path('',views.createblog_view,name="create"),
     path('getcomment/<int:id>',views.getcomment,name="getcomment"),
-    path('savecomment/<int:id>',views.savecomment,name="savecomment")
+    path('savecomment/<int:id>',views.savecomment,name="savecomment"),
+    path('likesanddislikes/',views.votescounter,name="likes&dislikes"),
+    path('getuservotes/',views.get_user_votes,name="uservotes")
 ]
