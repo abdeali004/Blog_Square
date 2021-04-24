@@ -1,92 +1,101 @@
 {% extends 'base.html' %}
-  {% load static %}
-  {% block title %}Trending Blogs --Blog Square--{% endblock title %}
+{% load static %}
+{% block title %}Trending Blogs --Blog Square--{% endblock title %}
 
-    {% block body %}
-    <div class="container">
-      <div class="row">
-        <!-- Latest Posts -->
-        <main class="posts-listing col-lg-8"> 
-          <div class="container">
-            <div class="row">
-              <!-- post -->
-              {%for blog in blogslist%}
-                <div class="post col-xl-6 blogs-class">
-                  <div class="post-thumbnail"><a href="post.html"><img src={% static 'img/blog-post-1.jpeg' %} alt="..." class="img-fluid"></a></div>
-                  <div class="post-details">
-                    <div class="post-meta d-flex justify-content-between">
-                      <div class="date meta-last">{{blog.blog_creation_date}}</div>
-                      <div class="category"><a href="#">{{blog.blog_category}}</a></div>
-                    </div><a href="post.html">
-                      <h3 class="h4">{{blog.blog_title}}</h3></a>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                    <footer class="post-footer d-flex align-items-center" style="white-space: nowrap;"><a href="#" class="author d-flex align-items-center flex-wrap">
-                        <div class="avatar"><img src={{blog.blog_author.pic.url}} alt="..." class="img-fluid"></div>
-                        <div class="title"><span>{{blog.blog_author.username}}</span></div></a>
-                      <div class="date"><i class="icon-clock"></i> {{blog.blog_creation_date|timesince}}</div>
-                      <div class="comments meta-last"><i class="icon-comment"></i>{{blog.num_of_comments}}</div>
-                    </footer>
-                  </div>
-                </div>
-              {%endfor%}
-
-              <!-- post -->
-
-            <!-- Pagination -->
-            <nav aria-label="Page navigation example" style="margin-top: auto; align-self: center;">
-              <ul class="pagination pagination-template d-flex justify-content-center">
-                {% if blogslist.has_previous %}
-                <li class="page-item"><a href="{%url 'blogs' blogslist.previous_page_number%}" class="page-link "> <i class="fa fa-angle-left"></i></a></li>
-                {%else%}
-                <li class="page-item"><a href="" class="page-link disabled"> <i class="fa fa-angle-left"></i></a></li>
-                {% endif %}
-                {%for pagenumber in blogslist.paginator.page_range %}
-                {%if pagenumber == blogslist.number%}
-                  <li class="page-item"><a href="{%url 'blogs' pagenumber%}" class="page-link active">{{pagenumber}}</a></li>
-                {%else%}
-                <li class="page-item"><a href="{%url 'blogs' pagenumber%}" class="page-link">{{pagenumber}}</a></li>
-                {%endif%}
-                  {%endfor%}
-                {% if blogslist.has_next %}
-                <li class="page-item"><a href="{%url 'blogs' blogslist.next_page_number%}" class="page-link"> <i class="fa fa-angle-right"></i></a></li>
-                {%else%}
-                <li class="page-item"><a href="" class="page-link disabled"> <i class="fa fa-angle-right"></i></a></li>
-                {% endif %}
-              </ul>
-            </nav>
+{% block body %}
+<div class="container">
+  <div class="row">
+    <!-- Latest Posts -->
+    <main class="posts-listing col-lg-8">
+      <div class="container">
+        <div class="row">
+          <!-- post -->
+          {%for blog in blogslist%}
+          <div class="post col-xl-6 blogs-class">
+            <div class="post-thumbnail"><a href="post.html"><img src={% static 'img/blog-post-1.jpeg' %} alt="..."
+                  class="img-fluid"></a></div>
+            <div class="post-details">
+              <div class="post-meta d-flex justify-content-between">
+                <div class="date meta-last">{{blog.blog_creation_date}}</div>
+                <div class="category"><a href="#">{{blog.blog_category}}</a></div>
+              </div><a href="post.html">
+                <h3 class="h4">{{blog.blog_title}}</h3>
+              </a>
+              <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                incididunt ut labore.</p>
+              <footer class="post-footer d-flex align-items-center" style="white-space: nowrap;"><a href="#"
+                  class="author d-flex align-items-center flex-wrap">
+                  <div class="avatar"><img src={{blog.blog_author.pic.url}} alt="..." class="img-fluid"></div>
+                  <div class="title"><span>{{blog.blog_author.username}}</span></div>
+                </a>
+                <div class="date"><i class="icon-clock"></i> {{blog.blog_creation_date|timesince}}</div>
+                <div class="comments meta-last"><i class="icon-comment"></i>{{blog.num_of_comments}}</div>
+              </footer>
+            </div>
           </div>
-        </main>
-        <aside class="col-lg-4">
-          <!-- Widget [Search Bar Widget]-->
-          {% comment %} <div class="widget search">
-            <header>
-              <h3 class="h6">Search the blog</h3>
-            </header>
-            <form action="#" class="search-form">
-              <div class="form-group">
-                <input type="search" placeholder="What are you looking for?">
-                <button type="submit" class="submit"><i class="icon-search"></i></button>
+          {%endfor%}
+
+          <!-- post -->
+
+          <!-- Pagination -->
+          <nav aria-label="Page navigation example" style="margin-top: auto; align-self: center;">
+            <ul class="pagination pagination-template d-flex justify-content-center">
+              {% if blogslist.has_previous %}
+              <li class="page-item"><a href="{%url 'blogs' blogslist.previous_page_number%}" class="page-link "> <i
+                    class="fa fa-angle-left"></i></a></li>
+              {%else%}
+              <li class="page-item"><a href="" class="page-link disabled"> <i class="fa fa-angle-left"></i></a></li>
+              {% endif %}
+              {%for pagenumber in blogslist.paginator.page_range %}
+              {%if pagenumber == blogslist.number%}
+              <li class="page-item"><a href="{%url 'blogs' pagenumber%}" class="page-link active">{{pagenumber}}</a>
+              </li>
+              {%else%}
+              <li class="page-item"><a href="{%url 'blogs' pagenumber%}" class="page-link">{{pagenumber}}</a></li>
+              {%endif%}
+              {%endfor%}
+              {% if blogslist.has_next %}
+              <li class="page-item"><a href="{%url 'blogs' blogslist.next_page_number%}" class="page-link"> <i
+                    class="fa fa-angle-right"></i></a></li>
+              {%else%}
+              <li class="page-item"><a href="" class="page-link disabled"> <i class="fa fa-angle-right"></i></a></li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+    </main>
+    <aside class="col-lg-4">
+      <!-- Widget [Search Bar Widget]-->
+      {% comment %} <div class="widget search">
+        <header>
+          <h3 class="h6">Search the blog</h3>
+        </header>
+        <form action="#" class="search-form">
+          <div class="form-group">
+            <input type="search" placeholder="What are you looking for?">
+            <button type="submit" class="submit"><i class="icon-search"></i></button>
+          </div>
+        </form>
+      </div> {% endcomment %}
+      <!-- Widget [Latest Posts Widget]        -->
+      <div class="widget latest-posts">
+        <header>
+          <h3 class="h6">Latest Posts</h3>
+        </header>
+        {%for post in latest_posts %}
+        <div class="blog-posts"><a href="#">
+            <div class="item d-flex align-items-center">
+              <div class="image"><img src="{{post.blog_thumbnail.url}}" alt="..." class="img-fluid"></div>
+              <div class="title"><strong>{{post.blog_title}}</strong>
+                <div class="d-flex align-items-center">
+                  <div class="views"><i class="icon-eye"></i> {{post.blog_views}}</div>
+                  <div class="comments"><i class="icon-comment"></i>{{post.num_of_comments}}</div>
+                </div>
               </div>
-            </form>
-          </div> {% endcomment %}
-          <!-- Widget [Latest Posts Widget]        -->
-          <div class="widget latest-posts">
-            <header>
-              <h3 class="h6">Latest Posts</h3>
-            </header>
-            {%for post in latest_posts %}
-              <div class="blog-posts"><a href="#">
-                <div class="item d-flex align-items-center">
-                  <div class="image"><img src="{{post.blog_thumbnail.url}}" alt="..." class="img-fluid"></div>
-                  <div class="title"><strong>{{post.blog_title}}</strong>
-                    <div class="d-flex align-items-center">
-                      <div class="views"><i class="icon-eye"></i> {{post.blog_views}}</div>
-                      <div class="comments"><i class="icon-comment"></i>{{post.num_of_comments}}</div>
-                    </div>
-                  </div>
-              </div>
-            {%endfor%}
-            <!-- <div class="blog-posts"><a href="#">
+            </div>
+        </div>
+        {%endfor%}
+        <!-- <div class="blog-posts"><a href="#">
                 <div class="item d-flex align-items-center">
                   <div class="image"><img src={% static 'img/small-thumbnail-1.jpg' %} alt="..." class="img-fluid"></div>
                   <div class="title"><strong>Alberto Savoia Can Teach You About</strong>
@@ -115,31 +124,32 @@
                   </div>
                 </div></a></div>
           </div> -->
-          <!-- Widget [Categories Widget]-->
-          <div class="widget categories">
-            <header>
-              <h3 class="h6">Categories</h3>
-            </header>
-            <div class="item d-flex justify-content-between"><a href="#">Growth</a><span>12</span></div>
-            <div class="item d-flex justify-content-between"><a href="#">Local</a><span>25</span></div>
-            <div class="item d-flex justify-content-between"><a href="#">Sales</a><span>8</span></div>
-            <div class="item d-flex justify-content-between"><a href="#">Tips</a><span>17</span></div>
-            <div class="item d-flex justify-content-between"><a href="#">Local</a><span>25</span></div>
-          </div>
-          <!-- Widget [Tags Cloud Widget]-->
-          <div class="widget tags">       
-            <header>
-              <h3 class="h6">Tags</h3>
-            </header>
-            <ul class="list-inline">
-              <li class="list-inline-item"><a href="#" class="tag">#Business</a></li>
-              <li class="list-inline-item"><a href="#" class="tag">#Technology</a></li>
-              <li class="list-inline-item"><a href="#" class="tag">#Fashion</a></li>
-              <li class="list-inline-item"><a href="#" class="tag">#Sports</a></li>
-              <li class="list-inline-item"><a href="#" class="tag">#Economy</a></li>
-            </ul>
-          </div>
-        </aside>
-      </div>
-    </div>
-    {% endblock body %}
+        <!-- Widget [Categories Widget]-->
+        <div class="widget categories">
+          <header>
+            <h3 class="h6">Categories</h3>
+          </header>
+          <div class="item d-flex"><a href="#" style="text-align: left;"><strong>Trending</strong></a><span></span></div>
+          <div class="item d-flex justify-content-between"><a href="#">Technology</a><span>25</span></div>
+          <div class="item d-flex justify-content-between"><a href="#">Health</a><span>25</span></div>
+          <div class="item d-flex justify-content-between"><a href="#">Food</a><span>8</span></div>
+          <div class="item d-flex justify-content-between"><a href="#">Business</a><span>17</span></div>
+          {% comment %} <div class="item d-flex justify-content-between"><a href="#">Other</a><span>25</span></div> {%endcomment %}
+        </div>
+        <!-- Widget [Tags Cloud Widget]-->
+        <div class="widget tags">
+          <header>
+            <h3 class="h6">Tags</h3>
+          </header>
+          <ul class="list-inline">
+            <li class="list-inline-item"><a href="#" class="tag">#Business</a></li>
+            <li class="list-inline-item"><a href="#" class="tag">#Technology</a></li>
+            <li class="list-inline-item"><a href="#" class="tag">#Fashion</a></li>
+            <li class="list-inline-item"><a href="#" class="tag">#Sports</a></li>
+            <li class="list-inline-item"><a href="#" class="tag">#Economy</a></li>
+          </ul>
+        </div>
+    </aside>
+  </div>
+</div>
+{% endblock body %}
