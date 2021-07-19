@@ -23,10 +23,12 @@ class userInfo(models.Model):
     state = models.CharField(max_length=50,default="")
     postal = models.CharField(max_length=50,default="")
     about = models.TextField(default="")
-    blogsViewed = models.IntegerField(default=0)
+    blogsViewed = models.TextField(default="")
     blogsPublished = models.IntegerField(default=0)
+    blogsCount = models.IntegerField(default=0)
     visitedSite = models.IntegerField(default=0)
-    isFirstVisit = models.BooleanField(default=True)
+    commented = models.IntegerField(default=0)
+    blogsLiked = models.IntegerField(default=0)
     newUser = models.BooleanField(default=True)
     checkCode = models.CharField(max_length=12)
     date = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -34,6 +36,15 @@ class userInfo(models.Model):
     @staticmethod
     def get_user(user):
         return userInfo.objects.get(username = user)
+    
+    @staticmethod
+    def increment_comment(user):
+        obj = userInfo.objects.filter(username = user)
+        if(len(obj) > 0):
+            obj = obj[0]
+            obj.commented = obj.commented + 1
+            obj.save()
+
 
     def __str__(self):
         return self.username

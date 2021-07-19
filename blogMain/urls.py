@@ -17,6 +17,8 @@ urlpatterns = [
     path('myProfile', views.profile, name = "profile"),
     path('profileEdit', views.profileEdit),
     path('updateImage', views.updateImage, name="updateImage"),
+    path('user/<str:username>', views.user_profile_main, name = "user_profile_main"),
+    path('user/<str:username>/<int:allposts>', views.user_profile, name = "user_profile"),
     path('blogapp/',include(blogurls)),
     path('contact', views.contact, name = "contact"),
     path('user_help', views.user_help, name="help"),

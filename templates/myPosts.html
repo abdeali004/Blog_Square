@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>My Posts --username--</title>
+  <title>My Profile #{{authorname.username}}</title>
 
   <!-- Bootstrap core CSS -->
   <link href={% static '/connect/vendor/bootstrap/css/bootstrap.min.css' %} rel="stylesheet">
@@ -60,6 +60,34 @@
           <li class="nav-item">
             <a class="nav-link" href="{%url 'contact' %}">Contact</a>
           </li>
+          {% if not request.user.is_authenticated %}
+            <a href="{%url 'login'%}" class="active" style="color:white; font-size:16px;margin-top:5px;">Login</a>
+            {% endif %}
+
+            {% if request.user.is_authenticated %}
+            <!--user Login css-->
+            <li class="nav dropdown">
+              <a class="nav" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                <i class="fa fa-user fa-sm" style="color:#6d7178; margin-top:7px;"></i>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" style="color:#690707">{{request.user}}</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'profile' %}" style="color:black">Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'user_profile' username=request.user allposts=0 %}" style="color:black">My Blogs</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'likedposts' user=request.user %}" style="color:black">Liked Posts</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{%url 'addblog' %}" style="color:black">Create Blog</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'logout' %}" style="color:red">Logout</a>
+              </div>
+            </li>
+            <!--user Login css ends-->
+            {% endif %}
+
         </ul>
       </div>
     </div>
@@ -72,10 +100,12 @@
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="site-heading">
-            <img class ="user_image_AllBlogs" src="{% static '/img/abdeali004.jpg' %}" class="rounded-circle" alt="Cinque Terre" >
-            <h2>{{request.user}}</h2>
+            <img class ="user_image_AllBlogs" src="{{authorname.pic.url}}" class="rounded-circle" alt="Cinque Terre" >
+            <h2>{{authorname.username}}</h2>
             <span class="subheading"><b><u>About Me</u></b></span>
-            <span class="subheading">I am a programmer and a backend developer.</span>
+            <span class="subheading">
+              {{authorname.about|default:"No Info Available"}}
+            </span>
           </div>
         </div>
       </div>
@@ -89,19 +119,19 @@
   <hr>
   <div class="row">
     <div class="col-md-2 mx-auto" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogs Liked">
-      <i class="fa fa-heart" style="color:#800909;"></i> 100
+      <a href="/blogapp/liked/{{authorname.username}}" ><i class="fa fa-heart" style="color:#800909;"></i> {{contribution.like}}</a>
     </div>
     <div class="col-md-2 mx-auto" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogs Visited">
-      <i class="fa fa-eye"></i> 100
+      <i class="fa fa-eye"></i> {{contribution.views}}
     </div>
     <div class="col-md-2 mx-auto" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogs Created">
-       <i class="fa fa-pencil" style="color:#093f80;"></i> 100
+       <i class="fa fa-pencil" style="color:#093f80;"></i> {{contribution.published}}
     </div>
     <div class="col-md-2 mx-auto" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogs Commented">
-      <i class="fa fa-comments" style="color:#4c0d73;"></i> 100
+      <i class="fa fa-comments" style="color:#4c0d73;"></i> {{contribution.comments}}
     </div>
     <div class="col-md-2 mx-auto" data-bs-toggle="tooltip" data-bs-placement="top" title="Stars Achieved">
-      <i class="fa fa-star" style="color:#6b0742;"></i> 100
+      <i class="fa fa-star" style="color:#6b0742;"></i> 2
     </div>
   </div>
   <hr>
@@ -112,68 +142,33 @@
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
         {%for blog in myblogs%}
+        <div class="row">
+        <div class="col-lg-1 col-md-1 mx-auto"><i class="fa fa-edit fa-2x" style="margin-top:40px;"></i></div>
+        <div class="col-lg-11 col-md-10 mx-auto">
           <div class="post-preview">
             <a href="{%url 'blog' blog.blog_id %}">
               <h2 class="post-title">
                 {{blog.blog_title}}
               </h2>
-              <h3 class="post-subtitle">
-                Problems look mighty small from 150 miles up
-              </h3>
             </a>
             <p class="post-meta">Posted by
               <a href="#">{{blog.blog_author.username}}</a>
               on {{blog.blog_creation_date}}</p>
           </div>
+          </div>
+          </div>
           <hr>
         {%endfor%}
-        <!-- <div class="post-preview">
-          <a href="post.html">
-            <h2 class="post-title">
-              I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.
-            </h2>
-          </a>
-          <p class="post-meta">Posted by
-            <a href="#">Start Bootstrap</a>
-            on September 18, 2019</p>
-        </div>
-        <hr>
-        <div class="post-preview">
-          <a href="post.html">
-            <h2 class="post-title">
-              Science has not yet mastered prophecy
-            </h2>
-            <h3 class="post-subtitle">
-              We predict too much for the next year and yet far too little for the next ten.
-            </h3>
-          </a>
-          <p class="post-meta">Posted by
-            <a href="#">Start Bootstrap</a>
-            on August 24, 2019</p>
-        </div>
-        <hr>
-        <div class="post-preview">
-          <a href="post.html">
-            <h2 class="post-title">
-              Failure is not an option
-            </h2>
-            <h3 class="post-subtitle">
-              Many say exploration is part of our destiny, but it’s actually our duty to future generations.
-            </h3>
-          </a>
-          <p class="post-meta">Posted by
-            <a href="#">Start Bootstrap</a>
-            on July 8, 2019</p>
-        </div>
-        <hr> -->
+        <!-- <div class="post-preview"-->
+       
         <!-- Pager -->
         {%if not allposts %}
         <div class="clearfix">
-          <a class="btn btn-primary float-right" href="{%url 'userBlogs' 1 %}" style = "color:black;">All Posts &rarr;</a>
+          <a class="btn btn-primary float-right" href="{% url 'user_profile' username=authorname.username allposts=1 %}" style = "color:black;">All Posts &rarr;</a>
         </div>
         {%else%}
         <div class="clearfix">
-          <a class="btn btn-primary float-right" href="{%url 'userBlogs' 0 %}" style = "color:black;">Fewer Posts &rarr;</a>
+          <a class="btn btn-primary float-right" href="{% url 'user_profile' username=authorname.username allposts=0 %}" style = "color:black;">Fewer Posts &rarr;</a>
         </div>
         {%endif%}
       </div>

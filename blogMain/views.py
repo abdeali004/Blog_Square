@@ -5,20 +5,37 @@ from django.contrib.auth import authenticate, login, logout
 from blogMain.models import userInfo, verifyUser
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.contrib.auth import get_user
 import json
 import random
 from django.template.loader import get_template
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django.db.models import Count
 from datetime import datetime,date
+from blogapp.models import Blog_article,Article_comment,Article_votes_description,Article_tag
 
 # Create your views here.
 def home(request):
     loginCheck = False
     if not request.user.is_anonymous:
         loginCheck = True
+        author = userInfo.objects.get(username=request.user)
+        author.blogsPublished = 2
+        author.blogsCount = 3
+        author.save()
+    trendingblogs = Blog_article.get_all_blogs().annotate(Count('blog_upvote')).order_by("-blog_upvote")
+    latestblogs = Blog_article.get_all_blogs().order_by("-blog_creation_date")
+    
+    if (trendingblogs.count() > 2):
+        trendingblogs = trendingblogs[0:2]
+    if (latestblogs.count() > 4):
+        latestblogs = latestblogs[0:4]
+
     context = {
                 "loginCheck" : loginCheck,
+                "trendingblogs": trendingblogs,
+                "latestblogs": latestblogs
             }
     return render(request, "index.html",context)
 
@@ -270,7 +287,7 @@ def profile(request):
     profile["postal"] = user.postal
     profile["about"] = user.about
     profile["visited"] = user.visitedSite
-    profile["read"] = user.blogsViewed
+    profile["read"] = user.blogsCount
     profile["published"] = user.blogsPublished
     context = {
         "profile" : profile,
@@ -323,14 +340,37 @@ def updateImage(request):
         return redirect("/myProfile")
     return redirect("/home")
 
-def blogs(request):
-    return render(request, "blog.html")
+def user_profile_main(request,username):
+    target = str(username) + "/0"
+    return redirect(target)
 
-def blog(request):
-    return render(request, "post.html")
+def user_profile(request,username, allposts):
+    userobj = userInfo.objects.filter(username=username)
+    if (len(userobj) == 0):
+        return redirect("home")
+    userobj = userobj[0]
+    total_comments = userobj.commented
+    total_blogs = userobj.blogsPublished
+    total_views = len(userobj.blogsViewed.split(",")) - 1
+    total_liked = userobj.blogsLiked
+    myblogs = Blog_article.get_user_blogs(userobj)
+    if ((allposts==0) and (len(myblogs)>4)):
+        myblogs = myblogs[0:4]
 
-def userBlogs(request):
-    return render(request, "myPost.html")
+    contribution = {
+        "like": total_liked,
+        "views": total_views,
+        "published": total_blogs,
+        "comments": total_comments
+    }
+
+    context = {
+        "myblogs":myblogs,
+        "allposts":allposts,
+        "authorname":userobj,
+        "contribution" : contribution,
+    }
+    return render(request,"myPosts.html",context)
 
 def contact(request):
     return render(request, "contact.html")

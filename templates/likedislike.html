@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Liked Posts</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href={% static '/connect/vendor/bootstrap/css/bootstrap.min.css' %} rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href={% static 'vendor/font-awesome/css/font-awesome.min.css' %} rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+  <!-- Custom styles for this template -->
+  <link href={% static 'connect/css/clean-blog.min.css' %} rel="stylesheet">
+  <style>
+      .user_image_AllBlogs{
+      width: 150px;
+      height: 150px;
+      border:2px solid #fff;
+      -moz-box-shadow: 0px 6px 5px #ccc;
+      -webkit-box-shadow: 0px 6px 5px #ccc;
+      box-shadow: 0px 6px 5px #ccc;
+      -moz-border-radius:190px;
+      -webkit-border-radius:190px;
+      border-radius:190px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="{%url 'home' %}">Blog Square</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fa fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'home' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'blogs' pagenum=1 %}">Blogs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'about' %}">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'contact' %}">Contact</a>
+          </li>
+          {% if not request.user.is_authenticated %}
+            <a href="{%url 'login'%}" class="active" style="color:white; font-size:16px;margin-top:5px;">Login</a>
+            {% endif %}
+
+            {% if request.user.is_authenticated %}
+            <!--user Login css-->
+            <li class="nav dropdown">
+              <a class="nav" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                <i class="fa fa-user" style="color:#6d7178; margin-top:7px;"></i>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" style="color:#690707">{{request.user}}</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'profile' %}" style="color:black">Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'user_profile' username=request.user allposts=0 %}" style="color:black">My Blogs</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'likedposts' user=request.user %}" style="color:black">Liked Posts</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{%url 'addblog' %}" style="color:black">Create Blog</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'logout' %}" style="color:red">Logout</a>
+              </div>
+            </li>
+            <!--user Login css ends-->
+            {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+<header class="masthead" style="background-image: url({% static '/img/liked.jpg' %})">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="site-heading">
+            <!-- <img  src="{% static '/img/abdeali004.jpg' %}" class="rounded-circle" alt="Cinque Terre" > -->
+            <h2 style="margin:15px;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;"> {{user}}</h2>
+            <span class="subheading" style="font-size:20px"><b><u></u></b></span>
+            <span class="subheading" style="font-size:50px">Liked {{likecount}}  Posts</span>
+            </div>
+        </div>
+        </div>
+    </div>
+    </header>
+    <div class="row" >
+        <div class="col-lg-8 col-md-10 mx-auto">
+           
+          {%for post in likedposts%}
+          <div class="row">
+            <div class="col-lg-1 col-md-1 mx-auto"><i class="fa fa-thumbs-up fa-2x" style="margin-top:40px;"></i></div>
+            <div class="col-lg-11 col-md-10 mx-auto">
+            <div class="post-preview">
+              <a  href="{%url 'blog' post.blog.blog_id %}" onMouseOver="this.style.color='skyblue'" onMouseOut="this.style.color='black'">
+                <h2 class="post-title" style="text-align:left;">
+                  {{post.blog.blog_title}}
+                </h2> 
+              </a>
+              <p class="post-meta">Posted by
+                <a href="#">{{post.blog.blog_author.username}}</a>
+                on {{post.blog.blog_creation_date}}</p>
+            </div>
+            </div>
+          </div>
+            <hr style="background-color:black;">
+          {%endfor%}
+        </div>
+    </div>
+
+     <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+         
+          <p class="copyright text-muted">Copyright &copy; <a href = "{%url 'home' %}">Blog Square</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script src={% static 'connect/vendor/jquery/jquery.min.js' %}></script>
+  <script src={% static 'connect/vendor/bootstrap/js/bootstrap.bundle.min.js' %}></script>
+
+  <script src={% static 'connect/js/clean-blog.min.js' %}></script>
+
+</body>
+
+</html>

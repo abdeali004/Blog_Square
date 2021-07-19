@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Trending Blogs --Blog Square--{% endblock title %}
+
+{% block body %}
+
+<div id="main div">
+    <center>
+        <img src="{% static 'img/create_blog.jpg' %}"  >
+        <h1>DON'T SLACK CREATE A BLOG NOW!!!!!</h1>
+    </center>
+</div>
+<div style="margin: 50px;">
+    <form method="POST" class="form" action="{%url 'preview' %}" enctype='multipart/form-data' style="padding: 10px;">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="title" class="form-label">Blog Title</label>
+            <input type="text" class="form-control" name="title" id="title" placeholder="Your Blog Title">
+        </div>
+        <div class="invalid-feedback">
+            Please Enter Valid Title
+        </div>
+        <div class="mb-3">
+            {{imageform.as_p}}
+        </div>
+        <div class="invalid-feedback">
+            Please Upload Valid Thumbnail For Your Blog
+        </div>
+        <div>
+            <label for="category" class="form-label">Blog Category</label>
+            <select name = "category" class="form-select form-select-lg mb-5" aria-label=".form-select-lg example" id="category" style="width: 100%;height:40px">
+                <option selected>Technology</option>
+                <option value="Buisness">Buisness</option>
+                <option value="Cooking">Cooking</option>
+                <option value="Health">Health</option>
+                <option value="Fashion">Fashion</option>
+                <option value="Sports">Sports</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div id="blogcontent">
+            <textarea name = "content" id="editor" placeholder="Enter Your Blog Content Here..."  autofocus></textarea>
+        </div>
+        <div class="invalid-feedback">
+            Blog Content Cannot Be Blank
+        </div>
+
+
+        <div class="mb-3" style="margin-top: 20px;">
+            <label for="tags" class="form-label">Hashtags for Blogs</label>
+            <input type="text" class="form-control" id="tags" name="tags" placeholder="Your Blog Keywords Followed By #">
+        </div>
+        <div class="invalid-feedback">
+            Hashtags improve your blogs search appearance. Please Enter atleast one hastag followed by #
+        </div>
+        <center>
+            <button type="submit" id="preview" style="border-radius: 75px!important;
+            border-block-color: skyblue;padding: 8px;margin: 5px;">
+            Save &#38; Preview
+            </button>
+        </center>
+    </form>
+</div>
+
+<script type="text/javascript" src="{% static 'richtexteditor/site/assets/scripts/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'richtexteditor/site/assets/scripts/module.js' %}"></script>
+<script type="text/javascript" src="{% static 'richtexteditor/site/assets/scripts/hotkeys.js' %}"></script>
+<script type="text/javascript" src="{% static 'richtexteditor/site/assets/scripts/uploader.js' %}"></script>
+<script type="text/javascript" src="{% static 'richtexteditor/site/assets/scripts/simditor.js' %}"></script>
+
+<script>
+    $(document).ready(function(e){
+        Simditor.locale = 'en-US';
+        var editor = new Simditor({
+        textarea: $('#editor'),
+        //optional options
+        upload:true,
+        pasteImage:true,
+        });
+        $('#id_image').css({'class':'form-control mb-3','width':'100%','border':'solid black 1px','border-block-color': 'skyblue','border-radius':'75px'});
+        $('#id_image').attr('required',false);
+
+        var title = "{{title}}";
+        if (title){
+            $('#title').val("{{title}}");
+            $('.invalid-feedback').eq(1).replaceWith(`<div class="invalid-feedback">
+                Reupload Image for Security Reasons.
+            </div>`)
+            $('.invalid-feedback').eq(1).css('display','block');
+            $('#category').val("{{category}}");
+            $('#tags').val("{{tags}}");
+            editor.setValue("{{content|safe}}");
+        }
+
+        var errormessage = "{{error}}";
+        if (errormessage){
+            $('body').prepend(`<div class="alert alert-primary" role="alert">
+            ${errormessage}</div>`)
+        }
+
+        $('.form').submit(function(e){
+            if ($('#title').val()==""){
+                $('#title').attr('class','form-control is-invalid')
+                $('.invalid-feedback').eq(0).css('display','block');
+                e.preventDefault();
+            }
+            else{
+                $('#title').attr('class','form-control is-valid')
+            }
+            if ($('#id_image').val()==""){
+                $('#id_image').attr('class','form-control mb-3 is-invalid');
+                $('.invalid-feedback').eq(1).css('display','block');
+                e.preventDefault();
+            }
+            else{
+                $('#id_image').attr('class','form-control mb-3 is-isvalid')
+            }
+            if (editor.getValue() == ""){
+                $('.invalid-feedback').eq(2).css('display','block');
+                e.preventDefault();
+            }
+            if ($('#tags').val() == "" || $('#tags').val().match("#") == null){
+                $('#tags').attr('class','form-control is-invalid')
+                $('.invalid-feedback').eq(3).css('display','block');
+                e.preventDefault();
+            }
+            else{
+                $('#id_image').attr('class','form-control mb-3 is-isvalid')
+            }
+        })
+    })
+</script>
+
+{%endblock body %}

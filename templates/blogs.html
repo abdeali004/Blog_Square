@@ -12,15 +12,14 @@
               <!-- post -->
               {%for blog in blogslist%}
                 <div class="post col-xl-6 blogs-class">
-                  <div class="post-thumbnail"><a href="{%url 'blog' blog.blog_id%}"><img src={% static 'img/blog-post-1.jpeg' %} alt="..." class="img-fluid"></a></div>
+                  <div class="post-thumbnail"><a href="{%url 'blog' blog.blog_id%}"><img src={{blog.blog_thumbnail.url}} alt="BLOG IMAGE MAIN" class="img-fluid" style="height:300px;"></a></div>
                   <div class="post-details">
                     <div class="post-meta d-flex justify-content-between">
                       <div class="date meta-last">{{blog.blog_creation_date}}</div>
-                      <div class="category"><a href="#">{{blog.blog_category}}</a></div>
+                      <div class="category"><a href="{%url 'categorysearch' blog.blog_category %}">{{blog.blog_category}}</a></div>
                     </div><a href="{%url 'blog' blog.blog_id%}">
                       <h3 class="h4">{{blog.blog_title}}</h3></a>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
-                    <footer class="post-footer d-flex align-items-center" style="white-space: nowrap;"><a href="#" class="author d-flex align-items-center flex-wrap">
+                    <footer class="post-footer d-flex align-items-center" style="white-space: nowrap;"><a href="{%url 'authorprofile' blog.blog_author.username 0 %}" class="author d-flex align-items-center flex-wrap">
                         <div class="avatar"><img src={{blog.blog_author.pic.url}} alt="..." class="img-fluid"></div>
                         <div class="title"><span>{{blog.blog_author.username}}</span></div></a>
                       <div class="date"><i class="icon-clock"></i> <span class="time">{{blog.blog_creation_date|timesince}}</span></div>
@@ -31,9 +30,10 @@
               {%endfor%}
 
           <!-- post -->
-
+          </div>
           <!-- Pagination -->
-          <nav aria-label="Page navigation example" style="margin-top: auto; align-self: center;">
+          <div class="d-flex justify-content-center">
+          <nav aria-label="Page navigation example" >
             <ul class="pagination pagination-template d-flex justify-content-center">
               {% if blogslist.has_previous %}
               <li class="page-item"><a href="{%url 'blogs' blogslist.previous_page_number%}" class="page-link "> <i
@@ -45,7 +45,7 @@
               {%if pagenumber == blogslist.number%}
               <li class="page-item"><a href="{%url 'blogs' pagenumber%}" class="page-link active">{{pagenumber}}</a>
               </li>
-              {%else%}
+              {%elif pagenumber > blogslist.number and pagenumber < blogslist.number|add:3%}
               <li class="page-item"><a href="{%url 'blogs' pagenumber%}" class="page-link">{{pagenumber}}</a></li>
               {%endif%}
               {%endfor%}
@@ -57,6 +57,7 @@
               {% endif %}
             </ul>
           </nav>
+          
         </div>
     </main>
     <aside class="col-lg-4">
@@ -65,9 +66,9 @@
         <header>
           <h3 class="h6">Search the blog</h3>
         </header>
-        <form action="#" class="search-form">
+        <form method="post" action="{% url 'search' %}" class="search-form">
           <div class="form-group">
-            <input type="search" placeholder="What are you looking for?">
+            <input type="search" name="search" placeholder="What are you looking for?">
             <button type="submit" class="submit"><i class="icon-search"></i></button>
           </div>
         </main>
@@ -77,9 +78,9 @@
             <header>
               <h3 class="h6">Search the blog</h3>
             </header>
-            <form action="#" class="search-form">
+            <form method="post" action="{% url 'search' %}" class="search-form">
               <div class="form-group">
-                <input type="search" placeholder="What are you looking for?">
+                <input type="search" name="search" placeholder="What are you looking for?">
                 <button type="submit" class="submit"><i class="icon-search"></i></button>
               </div>
             </form>
@@ -106,10 +107,9 @@
           <!-- Widget [Categories Widget]-->
           <div class="widget categories">
             <div class="item d-flex justify-content-between"><a><u>Categories</u></a><span></span></div>
-            <div class="item d-flex justify-content-between"><a href="#">Local</a><span>25</span></div>
-            <div class="item d-flex justify-content-between"><a href="#">Sales</a><span>8</span></div>
-            <div class="item d-flex justify-content-between"><a href="#">Tips</a><span>17</span></div>
-            <div class="item d-flex justify-content-between"><a href="#">Local</a><span>25</span></div>
+            {%for trendingtag in alltags reversed%}
+            <div class="item d-flex justify-content-between"><a href="{%url 'tagsearch' trendingtag.tags %}">{{trendingtag.tags}}</a><span>{{trendingtag.count}}</span></div>
+            {%endfor%}
           </div>
           <!-- Widget [Tags Cloud Widget]-->
           <div class="widget tags">       
@@ -117,11 +117,13 @@
               <h3 class="h6">Tags</h3>
             </header>
             <ul class="list-inline">
-              <li class="list-inline-item"><a href="#" class="tag">#Business</a></li>
-              <li class="list-inline-item"><a href="#" class="tag">#Technology</a></li>
-              <li class="list-inline-item"><a href="#" class="tag">#Fashion</a></li>
-              <li class="list-inline-item"><a href="#" class="tag">#Sports</a></li>
-              <li class="list-inline-item"><a href="#" class="tag">#Economy</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' 'business'%}" class="tag">#Business</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' 'technology'%}" class="tag">#Technology</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' 'health'%}" class="tag">#health</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' 'fashion'%}" class="tag">#Fashion</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' 'sports'%}" class="tag">#Sports</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' 'economy'%}" class="tag">#Economy</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' 'other'%}" class="tag">#Other</a></li>
             </ul>
           </div>
         </aside>
@@ -133,8 +135,6 @@
           var hours = $(this).text().split(',')[0];
           $(this).html(`${hours} ago`);
         })
-        
-        
       })
     </script>
 

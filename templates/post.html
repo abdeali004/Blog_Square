@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Tagline by username{% endblock title %}
+{% block title %}{{blog.blog_title}} by {{blog.blog_author.username}}{% endblock title %}
 
 {% block body %}
     <div class="container">
@@ -14,10 +14,11 @@
               <div class="post-details">
                 <div class="post-meta d-flex justify-content-between">
                   <div class="category">
-                    <a href="#">Business</a><a href="#">Financial</a>
+                    <a href="{% url 'categorysearch' blog.blog_category %}">{{blog.blog_category}}</a>
                   </div>
                 </div>
                 <h1>{{blog.blog_title}}<a href="#"><i class="fa fa-bookmark-o"></i></a></h1>
+              
                 <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#" class="author d-flex align-items-center flex-wrap">
                     <div class="avatar"><img src="{{blog.blog_author.pic.url}}" alt="..." class="img-fluid"></div>
                     <div class="title"><span>{{blog.blog_author.username}}</span></div></a>
@@ -28,32 +29,40 @@
                   </div>
                 </div>
                 <div class="post-body">
-                  <h2>Hello users to the company.</h2>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                  div Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda temporibus iusto voluptates deleniti similique rerum ducimus sint ex odio saepe. Sapiente quae pariatur ratione quis perspiciatis deleniti accusantium
-
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
-
-                  Someone famous in Source Title
-                  quasi nam. Libero dicta eum recusandae, commodi, ad, autem at ea iusto numquam veritatis, officiis. Accusantium optio minus, voluptatem? Quia reprehenderit, veniam quibusdam provident, fugit iusto ullam voluptas neque soluta adipisci ad.
-                  </p>
+                  {{blog.blog_content|safe}}
                 </div>
-                <div class="post-tags"><a href="#" class="tag">#Business</a><a href="#" class="tag">#Tricks</a><a href="#" class="tag">#Financial</a><a href="#" class="tag">#Economy</a></div>
+                <div class="post-tags">
+                  {% for tag in tags %}
+                    {%if tag %}
+                    <a href="{% url 'tagsearch' tag %}" class="tag">#{{tag}}</a>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                {% if request.user.is_authenticated %}
                 <center>
                 <div style="margin-top:30px">
                   <i id="thumbsup" class="fa fa-thumbs-up" style="font-size:50px;padding: 0px 20px;color:gray;"></i>
                   <i id="thumbsdown" class="fa fa-thumbs-down fa-flip-horizontal" style="font-size:50px;padding: 0px 20px;color:gray;"></i>
-                <!-- </div>
-                <div> -->
                   <br>
                   <span id="upvote" style="font-size:25px;padding: 0px 30px;color:gray;" >{{blog.blog_upvote}}</span>
                   <span id="downvote" style="font-size:25px;padding: 0px 30px;color:gray;">{{blog.blog_downvote}}</span>
                 </div>
+                {%endif%}
+                <div id="previewbuttoncontainer" style="margin-top:30px">
+                  {%if preview %}
+                  <button type="button" id="previewsave" style="border-radius: 75px!important;
+                  border-block-color: skyblue;padding: 8px;margin: 5px;">
+                  <a>Save Post</a>
+                  </button>
+                  <button type="button" id="previewdiscard" style="border-radius: 75px!important;
+                  border-block-color: skyblue;padding: 8px;margin: 5px;">
+                  <a href="{%url 'discardpost' blog.blog_id %}">Discard</a>
+                  </button>
+                  {% endif %}
+                </div>
                 </center>
                 
-                <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row"><a href="#" class="prev-post text-left d-flex align-items-center">
+                {% comment %} <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row"><a href="#" class="prev-post text-left d-flex align-items-center">
                     <div class="icon prev"><i class="fa fa-angle-left"></i></div>
                     <div class="text"><strong class="text-primary">Previous Post </strong>
                       <h6>I Bought a Wedding Dress.</h6>
@@ -61,8 +70,11 @@
                     <div class="text"><strong class="text-primary">Next Post </strong>
                       <h6>I Bought a Wedding Dress.</h6>
                     </div>
-                    <div class="icon next"><i class="fa fa-angle-right">   </i></div></a></div>
-          
+                    <div class="icon next"><i class="fa fa-angle-right">   </i></div></a>
+                </div>
+           {% endcomment %}
+                
+                {% if request.user.is_authenticated%}
                 <div class="post-comments">
                   <header>
                     <h3 class="h6">Post Comments<span class="no-of-comments">({{blog.num_of_comments}})</span></h3>
@@ -75,7 +87,7 @@
                   <form id="form" action="#" class="commenting-form">
                     <div class="row">
                       <div class="form-group col-md-6">
-                        <input type="text" name="username" value="{{blog.blog_author.username}}" id="username" placeholder="Name" class="form-control" disabled>
+                        <input type="text" name="username" value="{{request.user}}" id="username" placeholder="Name" class="form-control" disabled>
                       </div>
                       <div class="form-group col-md-12">
                         <textarea name="usercomment" id="usercomment" placeholder="Type your comment" class="form-control"></textarea>
@@ -86,6 +98,13 @@
                     </div>
                   </form>
                 </div>
+                {%else%}
+                <center>
+                  <button type="button" class="btn btn-danger">
+                  <a href="{% url 'login' %}" style="color:black;">Login To Comment</a>
+                  </button>
+                </center>
+                {%endif%}
               </div>
             </div>
           </div>
@@ -96,9 +115,9 @@
             <header>
               <h3 class="h6">Search the blog</h3>
             </header>
-            <form action="#" class="search-form">
+            <form method="post" action="{% url 'search' %}" class="search-form">
               <div class="form-group">
-                <input type="search" placeholder="What are you looking for?">
+                <input type="search" name="search" placeholder="What are you looking for?">
                 <button type="submit" class="submit"><i class="icon-search"></i></button>
               </div>
             </form>
@@ -109,7 +128,8 @@
               <h3 class="h6">Latest Posts</h3>
             </header>
             {%for post in latest_posts %}
-              <div class="blog-posts"><a href="{%url 'blog' post.blog_id%}">
+              <div class="blog-posts">
+                <a href="{%url 'blog' post.blog_id%}">
                 <div class="item d-flex align-items-center">
                   <div class="image"><img src="{{post.blog_thumbnail.url}}" alt="..." class="img-fluid"></div>
                   <div class="title"><strong>{{post.blog_title}}</strong>
@@ -118,20 +138,24 @@
                       <div class="comments"><i class="icon-comment"></i>{{post.num_of_comments}}</div>
                     </div>
                   </div>
+                </a>
               </div>
             {%endfor%}
-
           </div>
+
           <!-- Widget [Categories Widget]-->
           <div class="widget categories">
             <header>
               <h3 class="h6">Categories</h3>
             </header>
-            <div class="item d-flex justify-content-between"><a href="#">Growth</a><span>12</span></div>
-            <div class="item d-flex justify-content-between"><a href="#">Local</a><span>25</span></div>
-            <div class="item d-flex justify-content-between"><a href="#">Sales</a><span>8</span></div>
-            <div class="item d-flex justify-content-between"><a href="#">Tips</a><span>17</span></div>
-            <div class="item d-flex justify-content-between"><a href="#">Local</a><span>25</span></div>
+            {%for trendingtag in alltags%}
+            <div class="item d-flex justify-content-between">
+              <a href="{%url 'tagsearch' trendingtag.tags %}">
+                {{trendingtag.tags}}
+              </a>
+              <span>{{trendingtag.count}}</span>
+            </div>
+            {%endfor%}
           </div>
           <!-- Widget [Tags Cloud Widget]-->
           <div class="widget tags">       
@@ -139,16 +163,21 @@
               <h3 class="h6">Tags</h3>
             </header>
             <ul class="list-inline">
-              <li class="list-inline-item"><a href="#" class="tag">#Business</a></li>
-              <li class="list-inline-item"><a href="#" class="tag">#Technology</a></li>
-              <li class="list-inline-item"><a href="#" class="tag">#Fashion</a></li>
-              <li class="list-inline-item"><a href="#" class="tag">#Sports</a></li>
-              <li class="list-inline-item"><a href="#" class="tag">#Economy</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' category='business'%}" class="tag">#Business</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' category='technology'%}" class="tag">#Technology</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' category='health'%}" class="tag">#Health</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' category='cooking'%}" class="tag">#Cooking</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' category='fashion'%}" class="tag">#Fashion</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' category='sports'%}" class="tag">#Sports</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' category='economy'%}" class="tag">#Economy</a></li>
+              <li class="list-inline-item"><a href="{%url 'categorysearch' category='other'%}" class="tag">#Other</a></li>
             </ul>
           </div>
         </aside>
       </div>
     </div>
+
+
     <script>
       $(document).ready(function(e){
         $.ajax({
@@ -156,6 +185,7 @@
           method:"GET",
           success:function(data){
           var output = "";
+          console.log(data);
           for (i=data.length-1;i>=0;i--){
               output =` <div class="comment">
                         <div class="comment-header d-flex justify-content-between">
@@ -180,6 +210,7 @@
           data:{
             csrfmiddlewaretoken:"{{csrf_token}}",
             blog_id:"{{blog.blog_id}}",
+            user:"{{request.user}}",
           },
           success:function(data){
             if (data.like == true){
@@ -188,9 +219,8 @@
             else if (data.dislike == true){
               $('#thumbsdown').css('color','skyblue');
             }
-            console.log(data)
           }
-        })
+        });
       
           
           $('#addcomment').click(function(){
@@ -204,7 +234,7 @@
               data:{
                 user:user,
                 usercomment:usercomment,
-                csrfmiddlewaretoken:csr
+                csrfmiddlewaretoken:"{{csrf_token}}",
               },
               success:function(data){
                 form.reset();
@@ -213,13 +243,13 @@
                         <div class="comment-header d-flex justify-content-between">
                           <div class="user d-flex align-items-center">
                             <div class="image"><i class="fa fa-arrow-right"></i></div>
-                            <div class="title"><strong>${data.user}</strong><span class="date">${data.date}</span></div>
+                            <a href="" ><div class="title"><strong>${data.user}</strong></a><span class="date">${data.date}</span></div>
                           </div>
                         </div>
                         <div class="comment-body">
                           <p>${data.comment}</p>
                         </div>
-                      </div>`
+                      </div>`;
                   
               $('.post-comments').append(output);
               //for updating commentcount
@@ -229,9 +259,8 @@
               $('.no-of-comments').replaceWith(`<span class="no-of-comments">(${count})</span>`);
               }
             });
+          });
 
-            
-          })
           $('#thumbsup').click(function(){
                 var plus = true;
                 var color = $('#thumbsup').css('color');
@@ -251,13 +280,14 @@
                     csrfmiddlewaretoken:"{{csrf_token}}",
                     blogid:"{{blog.blog_id}}",
                     like: true,
-                    plus:plus,
+                    user:"{{request.user}}",
                   },
                   success:function(data){
                       $('#upvote').replaceWith(`<span id="upvote" style="font-size:25px;padding: 0px 30px;color:gray;" >${data.upvote}</span>`);
+                     $('#downvote').replaceWith(`<span id="downvote" style="font-size:25px;padding: 0px 30px;color:gray;" >${data.downvote}</span>`)
                     }
-                })
-            })
+                });
+            });
 
             $('#thumbsdown').click(function(){
                 var plus = true;
@@ -278,14 +308,27 @@
                     csrfmiddlewaretoken:"{{csrf_token}}",
                     blogid:"{{blog.blog_id}}",
                     like: false,
-                    plus:plus,
+                    user:"{{request.user}}",
                   },
                   success:function(data){
                     $('#downvote').replaceWith(`<span id="downvote" style="font-size:25px;padding: 0px 30px;color:gray;" >${data.downvote}</span>`)
+                    $('#upvote').replaceWith(`<span id="upvote" style="font-size:25px;padding: 0px 30px;color:gray;" >${data.upvote}</span>`);
                   }
-                })
-            })
+                });
+            });
 
-      })
+            function destroytoast(){
+              $('.alert').css('opacity','0');
+            }
+
+            $('#previewsave').click(function(e){
+              $('#previewbuttoncontainer').replaceWith(`<div class="alert alert-success" role="alert">
+                                                          Post Added Successfully!!
+                                                        </div>`);
+              $('.alert').css('opacity','1');
+              setInterval(destroytoast,3000);
+            });
+
+      });
       </script>
   {% endblock body %}
