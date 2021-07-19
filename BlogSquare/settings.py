@@ -134,5 +134,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "blogsquare.official@gmail.com"
-EMAIL_HOST_PASSWORD = "Bl0gSqu@re@123!"
+EMAIL_HOST_USER = "youremail"
+EMAIL_HOST_PASSWORD = "your password"
