@@ -2,9 +2,8 @@
 
 # What is Blogging?
 
-- A brief note is called Jotting.
+A blog is an online diary or journal located on a website. The content of a blog typically includes text, pictures, videos, animated GIFs etc.
 
-On this website, you can store all your important and personal brief notes that can be accessed anywhere from any device with an internet connection and web browser supported. So move ahead and store all your imaginations and ideas just with a simple click. Create your notes, edit them, and also you can share them through email with anyone.
 
 # What is Blog Square?
 
